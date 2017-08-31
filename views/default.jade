@@ -1,0 +1,53 @@
+extends layout
+
+block append scripts
+    script(src='http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js')
+    script(src='http://vuejs.org/js/vue.js')
+    link(rel='stylesheet',href='http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css')
+block content
+
+    h1 数据表格
+    p.lead 分页表格
+
+    div#container
+        div.form-inline
+            span 显示
+            select.form-control(v-on:change="showCountChange",v-model="showCount")
+                option(value='10') 10
+                option(value='15') 15
+                option(value='20') 20
+            span 项结果
+
+        table.table.table-bordered.table-hover.table-striped.table-hover
+                thead
+                    tr.success
+                        th(width="25%") 姓名
+                        th(width="25%") 年龄
+                        th(width="25%") 性别
+                        th(width="25%") 邮编
+                tbody
+                    tr(v-for='value in users')
+                        td{{value.name}}
+                        td{{value.age}}
+                        td{{value.sex==0?"女":"男"}}
+                        td{{value.zipCode}}
+
+            div.row
+                div.col-md-4
+                    显示第 {{(nowIndex-1)*showCount+1}} 至 {{nowIndex*showCount>count?count:nowIndex*showCount }} 项结果，共 {{count}} 项
+                div.col-md-8.text-right
+                    nav(aria-label="Page navigation")
+                        ul.pagination(style="margin:0")
+                            li(v-bind:class="{ disabled: nowIndex==1 }")
+                               a(href="#", aria-label="Previous" ,v-on:click="previous" )
+                                   span(aria-hidden="true") «
+                            li(v-for='num in pageCount',v-bind:class="{ active: nowIndex==num }")
+                                a(href="#",v-on:click="skip(num)") {{num}}
+                            li(v-bind:class="{ disabled: nowIndex==pageCount }")
+                                a(href="#", aria-label="Next", v-on:click="next" )
+                                    span(aria-hidden="true") »
+
+
+
+    script(src='/javascripts/table.js')
+
